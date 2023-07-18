@@ -1,4 +1,4 @@
-# nodepm
+# mpnpm
 
 ## Why 
 No more yarn install or npm remove.
