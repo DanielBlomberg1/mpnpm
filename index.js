@@ -3,7 +3,15 @@ const Spawn = require("child_process").spawn;
 const FS = require("fs");
 
 const detached = false;
-const allowedCommands = ["install", "uninstall", "i", "init", "run", "cache", "use"];
+const allowedCommands = [
+  "install",
+  "uninstall",
+  "i",
+  "init",
+  "run",
+  "cache",
+  "use",
+];
 
 const npmPath = "./package-lock.json";
 const yarnPath = "./yarn.lock";
@@ -118,23 +126,32 @@ function lookForLockFile() {
         })
       ) {
         const config = JSON.parse(FS.readFileSync("./config.json"));
-        console.log("No lock file found, using default package manager " + config.defaultPackageManager + ". \nIf you want to change it use nodepm use <package-manager>");
+        console.log(
+          "No lock file found, using default package manager " +
+            config.defaultPackageManager +
+            ". \nIf you want to change it use nodepm use <package-manager>"
+        );
         if (config.defaultPackageManager === "npm") {
-          console.log("default package manager is npm, using the appropriate command");
+          console.log(
+            "default package manager is npm, using the appropriate command"
+          );
           generateCommand(commandsMatrix.npm, additionalArgsMatrix.npm);
         } else if (config.defaultPackageManager === "yarn") {
-          console.log("default package manager is yarn, using the appropriate command");
-            generateCommand(commandsMatrix.yarn, additionalArgsMatrix.yarn);
-        } else if (config.defaultPackageManager === "pnpm") {
-          console.log("default package manager is pnpm, using the appropriate command");
-            generateCommand(commandsMatrix.pnpm, additionalArgsMatrix.pnpm);
-        }
-      }else{
-        console.log(
-            `No lock file found, please choose your default package manager using "nodepm use <package-manager>"  or run <package-manager> install`
+          console.log(
+            "default package manager is yarn, using the appropriate command"
           );
+          generateCommand(commandsMatrix.yarn, additionalArgsMatrix.yarn);
+        } else if (config.defaultPackageManager === "pnpm") {
+          console.log(
+            "default package manager is pnpm, using the appropriate command"
+          );
+          generateCommand(commandsMatrix.pnpm, additionalArgsMatrix.pnpm);
+        }
+      } else {
+        console.log(
+          `No lock file found, please choose your default package manager using "nodepm use <package-manager>"  or run <package-manager> install`
+        );
       }
-
     }
   }
 }
@@ -165,21 +182,19 @@ function checkIfAdditionalArgsExists() {
 function Exec(cmd, additionalArgs) {
   additionalArgs = additionalArgs ? additionalArgs : "";
 
-  console.log("$ " + cmd + " " + args + " " + additionalArgs);
-
-  if(cmd === "yarn add" && args.length === 0){
-    //excute command "yarn"
-    Spawn("yarn", [], {
-      shell: true,
-      stdio: "inherit",
-      detached: detached,
-    });     
+  if (cmd === "yarn add" && args.length === 0) {
+    console.log("$ yarn" );
+    callSpawn("yarn");
+  } else {
+    console.log("$ " + cmd + " " + args + " " + additionalArgs);
+    callSpawn(cmd + " " + args + " " + additionalArgs);
   }
+}
 
-  Spawn(cmd + " " + args + " " + additionalArgs, [], {
+function callSpawn(str){
+  Spawn(str, [], {
     shell: true,
     stdio: "inherit",
     detached: detached,
   });
 }
-
