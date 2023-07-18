@@ -19,28 +19,28 @@ const pnpmPath = "./pnpm-lock.yaml";
 
 const commandsMatrix = {
   npm: {
-    i: "npm install",
-    install: "npm install",
-    uninstall: "npm uninstall",
-    init: "npm init",
-    run: "npm run",
-    cache: "npm cache clean",
+    i: "install",
+    install: "install",
+    uninstall: "uninstall",
+    init: "init",
+    run: "run",
+    cache: "cache clean",
   },
   yarn: {
-    i: "yarn add",
-    install: "yarn add",
-    uninstall: "yarn remove",
-    init: "yarn init",
-    run: "yarn run",
-    cache: "yarn cache clean",
+    i: "add",
+    install: "add",
+    uninstall: "remove",
+    init: "init",
+    run: "run",
+    cache: "cache clean",
   },
   pnpm: {
-    i: "pnpm add",
-    install: "pnpm add",
-    uninstall: "pnpm remove",
-    init: "pnpm init",
-    run: "pnpm run",
-    cache: "pnpm cache clean",
+    i: "add",
+    install: "install",
+    uninstall: "remove",
+    init: "init",
+    run: "run",
+    cache: "cache clean",
   },
 };
 
@@ -51,7 +51,7 @@ const additionalArgsMatrix = {
   },
   yarn: {
     "-D": "--dev",
-    "-G": "--global",
+    "-G": "global",
   },
   pnpm: {
     "-D": "--save-dev",
@@ -97,7 +97,7 @@ function lookForLockFile() {
         }
       })
     ) {
-      generateCommand(commandsMatrix.npm, additionalArgsMatrix.npm);
+      generateCommand("npm", commandsMatrix.npm, additionalArgsMatrix.npm);
     } else if (
       FS.existsSync(yarnPath, FS.constants.F_OK, (err) => {
         if (err) {
@@ -105,7 +105,7 @@ function lookForLockFile() {
         }
       })
     ) {
-      generateCommand(commandsMatrix.yarn, additionalArgsMatrix.yarn);
+      generateCommand("yarn", commandsMatrix.yarn, additionalArgsMatrix.yarn);
     } else if (
       FS.existsSync(pnpmPath, FS.constants.F_OK, (err) => {
         if (err) {
@@ -113,7 +113,7 @@ function lookForLockFile() {
         }
       })
     ) {
-      generateCommand(commandsMatrix.pnpm, additionalArgsMatrix.pnpm);
+      generateCommand("pnpm", commandsMatrix.pnpm, additionalArgsMatrix.pnpm);
     } else {
       // read from config.json the default package manager
       // if exists then use npm install or yarn install or pnpm install
@@ -135,17 +135,25 @@ function lookForLockFile() {
           console.log(
             "default package manager is npm, using the appropriate command"
           );
-          generateCommand(commandsMatrix.npm, additionalArgsMatrix.npm);
+          generateCommand("npm", commandsMatrix.npm, additionalArgsMatrix.npm);
         } else if (config.defaultPackageManager === "yarn") {
           console.log(
             "default package manager is yarn, using the appropriate command"
           );
-          generateCommand(commandsMatrix.yarn, additionalArgsMatrix.yarn);
+          generateCommand(
+            "yarn",
+            commandsMatrix.yarn,
+            additionalArgsMatrix.yarn
+          );
         } else if (config.defaultPackageManager === "pnpm") {
           console.log(
             "default package manager is pnpm, using the appropriate command"
           );
-          generateCommand(commandsMatrix.pnpm, additionalArgsMatrix.pnpm);
+          generateCommand(
+            "pnpm",
+            commandsMatrix.pnpm,
+            additionalArgsMatrix.pnpm
+          );
         }
       } else {
         console.log(
@@ -156,42 +164,42 @@ function lookForLockFile() {
   }
 }
 
-function generateCommand(commands, additional) {
+function generateCommand(packageManager, commands, additional) {
   const command = commands[mainArg];
 
   const index = checkIfAdditionalArgsExists();
   let additionalArgs = "";
 
   if (index !== -1) {
-    additionalArgs = additional[args[index]];
+    additionalArgs = additional[args[index].toUpperCase()];
     args.splice(index, 1);
   }
 
-  Exec(command, additionalArgs);
+  Exec(packageManager, command, additionalArgs);
 }
 
 function checkIfAdditionalArgsExists() {
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === "-D" || args[i] === "-G") {
+    if (args[i].toUpperCase() === "-D" || args[i].toUpperCase() === "-G") {
       return i;
     }
   }
   return -1;
 }
 
-function Exec(cmd, additionalArgs) {
+function Exec(pm, cmd, additionalArgs) {
   additionalArgs = additionalArgs ? additionalArgs : "";
 
-  if (cmd === "yarn add" && args.length === 0) {
-    console.log("$ yarn" );
+  if (cmd === "add" && pm === "yarn" && args.length === 0) {
+    console.log("$ yarn");
     callSpawn("yarn");
   } else {
-    console.log("$ " + cmd + " " + args + " " + additionalArgs);
-    callSpawn(cmd + " " + args + " " + additionalArgs);
+    console.log("$ " + pm + " " + additionalArgs + " " + cmd + " " + args);
+    callSpawn(pm + " " + additionalArgs + " " + cmd + " " + args);
   }
 }
 
-function callSpawn(str){
+function callSpawn(str) {
   Spawn(str, [], {
     shell: true,
     stdio: "inherit",
