@@ -86,7 +86,6 @@ function lookForLockFile() {
         }
       })
     ) {
-      console.log("npm detected, using the appropriate command");
       generateCommand(commandsMatrix.npm, additionalArgsMatrix.npm);
     } else if (
       FS.existsSync(yarnPath, FS.constants.F_OK, (err) => {
@@ -95,7 +94,6 @@ function lookForLockFile() {
         }
       })
     ) {
-      console.log("yarn detected, using the appropriate command");
       generateCommand(commandsMatrix.yarn, additionalArgsMatrix.yarn);
     } else if (
       FS.existsSync(pnpmPath, FS.constants.F_OK, (err) => {
@@ -104,7 +102,6 @@ function lookForLockFile() {
         }
       })
     ) {
-      console.log("pnpm detected, using the appropriate command");
       generateCommand(commandsMatrix.pnpm, additionalArgsMatrix.pnpm);
     } else {
       // read from config.json the default package manager
@@ -120,17 +117,14 @@ function lookForLockFile() {
         const config = JSON.parse(FS.readFileSync("./config.json"));
         console.log("No lock file found, using default package manager " + config.defaultPackageManager + ". \nIf you want to change it use nodepm use <package-manager>");
         if (config.defaultPackageManager === "npm") {
-          console.log("npm detected, using the appropriate command");
+          console.log("default package manager is npm, using the appropriate command");
           generateCommand(commandsMatrix.npm, additionalArgsMatrix.npm);
-          //Exec("npm install");
         } else if (config.defaultPackageManager === "yarn") {
-          console.log("yarn detected, using the appropriate command");
+          console.log("default package manager is yarn, using the appropriate command");
             generateCommand(commandsMatrix.yarn, additionalArgsMatrix.yarn);
-          //Exec("yarn");
         } else if (config.defaultPackageManager === "pnpm") {
-          console.log("pnpm detected, using the appropriate command");
+          console.log("default package manager is pnpm, using the appropriate command");
             generateCommand(commandsMatrix.pnpm, additionalArgsMatrix.pnpm);
-          //Exec("pnpm install");
         }
       }else{
         console.log(
@@ -167,6 +161,8 @@ function checkIfAdditionalArgsExists() {
 
 function Exec(cmd, additionalArgs) {
   additionalArgs = additionalArgs ? additionalArgs : "";
+
+  console.log("$ " + cmd + " " + args + " " + additionalArgs);
 
   Spawn(cmd + " " + args + " " + additionalArgs, [], {
     shell: true,

@@ -16,6 +16,5 @@
   ],
   "homepage": "https://github.com/DanielBlomberg1/nodepm",
   "author": "DanielBlomberg1",
-  "license": "MIT",
-  "devDependencies": {}
+  "license" : "BSD-3-Clause"
 }
