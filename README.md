@@ -9,7 +9,7 @@ And for checking up on those older projects where you used different manager.
 "npm install mpnpm -g"
 
 To use please specify your preferred package-manager using "mpnpm use" command.
-Nodepm will use this incase there is no lockfile present in the project yet, 
+Mpnpm will use this incase there is no lockfile present in the project yet, 
 otherwise nodepm will recognise the pm used and use the correct commands. 
 
 ## Commands:
