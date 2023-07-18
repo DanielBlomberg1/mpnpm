@@ -167,7 +167,7 @@ function Exec(cmd, additionalArgs) {
 
   console.log("$ " + cmd + " " + args + " " + additionalArgs);
 
-  if(command === "yarn add" && args.length === 0){
+  if(cmd === "yarn add" && args.length === 0){
     //excute command "yarn"
     Spawn("yarn", [], {
       shell: true,
