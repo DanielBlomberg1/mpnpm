@@ -1,31 +1,31 @@
-# mpnpm
+# mypmp
 
-AKA My perfect node package manager
+AKA My package manager package
 
 ## Why
 No more yarn install or npm remove.
-Mpnpm simplifies working in the javascript enviroment, for those who tend to use different package manager at work and at home
+Mypmp simplifies working in the javascript enviroment, for those who tend to use different package manager at work and at home
 And for checking up on those older projects where you used different manager.
 
 ## How
-"npm install mpnpm -g"
+"npm install mypmp -g"
 
-To use please specify your preferred package-manager using "mpnpm use" command.
-Mpnpm will use this incase there is no lockfile present in the project yet, 
+To use please specify your preferred package-manager using "mypmp use" command.
+Mypmp will use this incase there is no lockfile present in the project yet, 
 otherwise nodepm will recognise the pm used and use the correct commands. 
 
 ## Commands:
-"mpnpm use \<package-manager>"
+"mypmp use \<package-manager>"
 
-"mpnpm install" (optional tags -D and -G)
+"mypmp install" (optional tags -D and -G)
 
-"mpnpm uninstall"
+"mypmp uninstall"
 
-"mpnpm init"
+"mypmp init"
 
-"mpnpm run"
+"mypmp run"
 
-"mpnpm cache" Equivelant to npm cache-clean
+"mypmp cache" Equivelant to npm cache-clean
 
 ## Tags
 -D installs the dependecy as a devDependency

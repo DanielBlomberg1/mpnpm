@@ -1,5 +1,5 @@
 {
-  "name": "mpnpm",
+  "name": "mypmp",
   "version": "1.0.0",
   "description": "Utility to convert npm command to the correct package manager based on your projects lock file",
   "main": "index.js",
