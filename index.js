@@ -3,7 +3,7 @@ const Spawn = require("child_process").spawn;
 const FS = require("fs");
 
 const detached = false;
-const allowedCommands = ["install", "uninstall", "init", "run", "cache", "use"];
+const allowedCommands = ["install", "uninstall", "i", "init", "run", "cache", "use"];
 
 const npmPath = "./package-lock.json";
 const yarnPath = "./yarn.lock";
@@ -11,6 +11,7 @@ const pnpmPath = "./pnpm-lock.yaml";
 
 const commandsMatrix = {
   npm: {
+    i: "npm install",
     install: "npm install",
     uninstall: "npm uninstall",
     init: "npm init",
@@ -18,6 +19,7 @@ const commandsMatrix = {
     cache: "npm cache clean",
   },
   yarn: {
+    i: "yarn add",
     install: "yarn add",
     uninstall: "yarn remove",
     init: "yarn init",
@@ -25,6 +27,7 @@ const commandsMatrix = {
     cache: "yarn cache clean",
   },
   pnpm: {
+    i: "pnpm add",
     install: "pnpm add",
     uninstall: "pnpm remove",
     init: "pnpm init",
@@ -164,9 +167,19 @@ function Exec(cmd, additionalArgs) {
 
   console.log("$ " + cmd + " " + args + " " + additionalArgs);
 
+  if(command === "yarn add" && args.length === 0){
+    //excute command "yarn"
+    Spawn("yarn", [], {
+      shell: true,
+      stdio: "inherit",
+      detached: detached,
+    });     
+  }
+
   Spawn(cmd + " " + args + " " + additionalArgs, [], {
     shell: true,
     stdio: "inherit",
     detached: detached,
   });
 }
+
