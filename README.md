@@ -1,6 +1,8 @@
 # mpnpm
 
-## Why 
+AKA My perfect node package manager
+
+## Why
 No more yarn install or npm remove.
 Mpnpm simplifies working in the javascript enviroment, for those who tend to use different package manager at work and at home
 And for checking up on those older projects where you used different manager.
