@@ -103,7 +103,7 @@ function lookForLockFile() {
   //check for .lock file
   // if exists then use npm install or yarn install or pnpm install
 
-  for (const [manager, path] of Object.entries(lockFileMapping)) {
+  for (const [manager, {path}] of Object.entries(lockFileMapping)) {
     if (FS.existsSync(path)) {
       generateCommand(
         manager,
