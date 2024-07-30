@@ -7,8 +7,9 @@ const configPath = "./config.json";
 const detached = false;
 const allowedCommands = [
   "install",
-  "uninstall",
   "i",
+  "add",
+  "uninstall",
   "init",
   "run",
   "cache",
@@ -31,6 +32,7 @@ const commandsMatrix = {
   npm: {
     i: "install",
     install: "install",
+    add: "install",
     uninstall: "uninstall",
     init: "init",
     run: "run",
@@ -39,14 +41,16 @@ const commandsMatrix = {
   yarn: {
     i: "add",
     install: "add",
+    add: "add",
     uninstall: "remove",
     init: "init",
     run: "run",
     cache: "cache clean",
   },
   pnpm: {
-    i: "add",
+    i: "install",
     install: "install",
+    add: "install",
     uninstall: "remove",
     init: "init",
     run: "run",
@@ -58,27 +62,22 @@ const additionalArgsMatrix = {
   npm: {
     "-D": "--save-dev",
     "-G": "--global",
+    "global": "--global",
+    "--dev": "--save-dev",
   },
   yarn: {
     "-D": "--dev",
     "-G": "global",
+    "--save-dev": "--dev",
+    "--global": "global",
   },
   pnpm: {
     "-D": "--save-dev",
     "-G": "--global",
+    "global": "--global",
+    "--dev": "--save-dev",
   },
 };
-
-////////////////////////////////
-/// ACTUAL LOOP               //
-/// Extract Command Line Args //
-////////////////////////////////
-
-const args = process.argv ? process.argv.splice(2) : [];
-const mainArg = args[0].trim();
-args.shift();
-
-lookForLockFile();
 
 function lookForLockFile() {
   if (!allowedCommands.includes(mainArg)) {
@@ -191,3 +190,16 @@ function callSpawn(str) {
     detached: detached,
   });
 }
+
+
+////////////////////////////////
+/// ACTUAL LOOP               //
+/// Extract Command Line Args //
+////////////////////////////////
+
+const args = process.argv ? process.argv.splice(2) : [];
+// default arg is install
+const mainArg = args.length === 0 ? "i" : args[0].trim();
+args.shift();
+
+lookForLockFile();
